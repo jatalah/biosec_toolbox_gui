@@ -41,7 +41,7 @@ nodes_data <-
   bind_rows()
 
 # Save the combined nodes data
-write_rds(nodes_data, "combined_nodes_data.rds")
+write_rds(nodes_data, "combined_nodes_data.rds", compress = 'xz')
 
 # Process and combine edges files
 edges_data <- edges_files %>%
@@ -49,4 +49,4 @@ edges_data <- edges_files %>%
   bind_rows()
 
 # Save the combined edges data
-write_rds(edges_data, "combined_edges_data.rds")
+write_rds(edges_data, "combined_edges_data.rds", compress = 'xz')
