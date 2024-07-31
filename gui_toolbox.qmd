@@ -1,0 +1,183 @@
+---
+title: "Connectivity of fanworm incursions"
+format: dashboard
+nav-buttons:
+      - icon: github
+        href: https://github.com/jatalah/biosec_toolbox_gui
+server: shiny
+theme: dafault
+---
+
+```{r}
+#| context: setup
+library(tidyverse)
+library(sf)
+library(leaflet)
+library(shiny)
+library(RColorBrewer)
+```
+
+# Networks
+
+## Inputs {.sidebar}
+
+![](https://www.biosecurity-toolbox.org.nz/wp-content/uploads/sites/176/2020/06/marine-biosecurity-toolbox_logo_100-A.png)
+
+This is a mock Graphical User Interface (GUI) designed to visualise the outputs of a dynamic network model simulating the connectivity between New Zealand's ports following a Mediterranean fanworm, *Sabella spallanzanii*, incursion.
+
+```{r}
+sliderInput("year_slider", "Year:", 
+            min = 1, max = 10, value = 3)
+
+selectInput(
+  "management_options",
+  label = "Management options",
+  choices = c("Business as usual" = "BAU", 
+              "Population culling" = "CULL", 
+              "Hull cleaning" = "HULL"),
+  selected = "BAU"
+)
+
+selectInput(
+  "port_options",
+  label = "Port of incursion",
+  choices = c("Auckland"= "AUK", "Tauranga" = "TAU", "Lyttelton" = "LYT"),
+  selected = "AUK"
+)
+
+```
+
+This research was conducted as part of the [Marine Biosecurity ToolBox](https://www.biosecurity-toolbox.org.nz/) programme, which is funded by the New Zealand Ministry for Business, Innovation and Employment research grant C01X1511.
+
+![](https://live.staticflickr.com/3138/2853160957_ab4cc4fcfb_b.jpg){width="302"}
+
+## Connectivity map
+
+```{r}
+#| context: server
+
+nodes <- read_rds('nodes.rds')
+edges <- read_rds('edges.rds')
+
+output$leaflet_map <- renderLeaflet({
+
+nodes_data <- 
+  nodes %>% 
+  filter(year == input$year_slider & MNT == input$management_options & port == input$port_options) 
+
+edges_data <- 
+  edges %>% 
+  filter(year == input$year_slider & MNT == input$management_options & port == input$port_options)
+
+mypal_degree <- colorNumeric(palette = brewer.pal(n = 8, name = "Blues"), domain = nodes_data$degree)
+
+mypal_weight <- colorNumeric(palette = brewer.pal(n = 8, name = "Blues"), domain = edges_data$weight)
+
+leaflet() %>%
+  
+  addProviderTiles(providers$OpenStreetMap, group = "Street view") %>% # Add Street view Base map
+  
+  # addProviderTiles("Stadia.AlidadeSmoothDark") %>% 
+  
+  addPolylines(data = edges_data, 
+               color = ~mypal_weight(weight),
+               weight = ~sqrt(weight)*50
+               ) %>%
+  
+  addCircles(
+    data = nodes_data,
+    color = 'black',
+    label = ~ Name,
+    weight = 1,
+    popup = ~ paste0(
+      Name,
+      "<br>",
+      "Degree: ", degree,
+      "<br>",
+      "In degree: ", inDegree,
+      "<br>",
+      "Out degree: ", outDegree
+    ),
+    fillOpacity = 0.7,
+    # fillColor = ~ mypal_degree(degree),
+    fillColor = 'white',
+    stroke = T,
+    radius = ~ degree * 2.5e3,
+  ) %>% 
+  
+  setView(173.40, -41, zoom = 6) %>% 
+  
+   addLegend(
+      title = "Weight",
+      pal = mypal_weight,
+      values = edges_data$weight,
+      position = "bottomright"
+    ) %>% 
+  
+  addControl(html = "<div id='map-title'>Sabella Connectivity</div>",
+               position = "topright") %>%
+  
+  addControl(html = "<div id='map-title'>Author: Biosecurity ToolBox</div>",
+               position = "bottomleft") %>%
+  
+  # addLayersControl(baseGroups = c("Street view", "Dark"),
+  #                    options = layersControlOptions(collapsed = F)) %>%
+  
+  addScaleBar()
+
+})
+```
+
+```{r}
+leafletOutput("leaflet_map")
+```
+
+# Bioinvasions {orientation="columns"}
+
+## Bioinvasion process {width="70%"}
+
+Random text about bioinvasions process that the model is trying to capture.
+
+-   **Entrainment**: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultricies dolor vitae est fermentum, nec rutrum nisi congue. Duis consequat quam ac odio blandit, id lobortis mi pharetra. Curabitur vehicula justo nec velit convallis, vitae tristique est luctus. Cras vitae tellus non nisi sollicitudin fermentum. Quisque id feugiat lacus, ut fermentum orci. Nullam convallis interdum orci, eget aliquet lectus gravida ac. Nullam suscipit diam nec lacus vulputate, nec suscipit quam fermentum. Integer scelerisque sapien a orci varius, a convallis odio lacinia. Morbi nec libero nec neque rutrum vulputate. Suspendisse potenti.
+
+-   **Transport:** Fusce sed fermentum arcu, in suscipit nisi. Integer ac lectus justo. Nulla facilisi. Vestibulum consectetur odio eu ex convallis, nec dapibus tortor consequat. In quis ligula nisi. Aliquam at est eget urna pulvinar faucibus. In hac habitasse platea dictumst. Vivamus vitae purus vestibulum, commodo elit vel, efficitur metus. Nunc pharetra turpis ac nisi molestie, sed ultrices orci ullamcorper. Maecenas aliquet massa in tellus vehicula, id tristique quam eleifend. Cras vel nisi eleifend, efficitur quam ut, hendrerit lectus.
+
+-   **Introduction:** Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vehicula diam eu libero tincidunt, auctor malesuada ipsum volutpat. Nullam quis sapien consequat, vestibulum ante vel, ullamcorper ipsum. Phasellus gravida magna vel ipsum posuere, non sodales magna tempus. Integer luctus tellus id sapien consequat, quis tincidunt risus volutpat. Proin ut lacus vel lacus venenatis tempor. Sed id dapibus enim.
+
+-   **Establishment:** Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vehicula diam eu libero tincidunt, auctor malesuada ipsum volutpat. Nullam quis sapien consequat, vestibulum ante vel, ullamcorper ipsum. Phasellus gravida magna vel ipsum posuere, non sodales magna tempus. Integer luctus tellus id sapien consequat, quis tincidunt risus volutpat. Proin ut lacus vel lacus venenatis tempor. Sed id dapibus enim.
+
+## Infografic {width="30%"}
+
+![](images/infographic%20-%20Propagule%20pressure%20RGB.webp)
+
+Infografic credit: [Hilliam K, Floerl O, and Treml EA. 2024. Priorities for improving predictions of vessel-mediated marine invasions. Science of The Total Environment: 171162.](https://www.sciencedirect.com/science/article/pii/S0048969724013019?dgcid=author)
+
+# Dynamics
+
+## Species dynamics
+
+### Column {width="70%"}
+
+Projecting surrounded literature yet delightful alteration but bed men. Open are from long why cold. If must snug by upon sang loud left. As me do preference entreaties compliment motionless ye literature. Day behaviour explained law remainder. Produce can cousins account you pasture. Peculiar delicate an pleasant provided do perceive.
+
+At every tiled on ye defer do. No attention suspected oh difficult. Fond his say old meet cold find come whom. The sir park sake bred. Wonder matter now can estate esteem assure fat roused. Am performed on existence as discourse is. Pleasure friendly at marriage blessing or.
+
+Ladies others the six desire age. Bred am soon park past read by lain. As excuse eldest no moment. An delight beloved up garrets am cottage private. The far attachment discovered celebrated decisively surrounded for and. Sir new the particular frequently indulgence excellence how. Wishing an if he sixteen visited tedious subject it. Mind mrs yet did quit high even you went. Sex against the two however not nothing prudent colonel greater. Up husband removed parties staying he subject mr.
+
+### Column {width="30%"}
+
+![](images/species_dynamics.webp){width="589"}
+
+## Vessel dynamics
+
+### Column {width="70%"}
+
+Dashwood contempt on mr unlocked resolved provided of of. Stanhill wondered it it welcomed oh. Hundred no prudent he however smiling at an offence. If earnestly extremity he he propriety something admitting convinced ye. Pleasant in to although as if differed horrible. Mirth his quick its set front enjoy hoped had there. Who connection imprudence middletons too but increasing celebrated principles joy. Herself too improve gay winding ask expense are compact. New all paid few hard pure she.
+
+Led ask possible mistress relation elegance eat likewise debating. By message or am nothing amongst chiefly address. The its enable direct men depend highly. Ham windows sixteen who inquiry fortune demands. Is be upon sang fond must shew. Really boy law county she unable her sister. Feet you off its like like six. Among sex are leave law built now. In built table in an rapid blush. Merits behind on afraid or warmly.
+
+Is be upon sang fond must shew. Really boy law county she unable her sister. Feet you off its like like six. Among sex are leave law built now. In built table in an rapid blush. Merits behind on afraid or warmly.
+
+### Column {width="30%"}
+
+![](images/vessel_dynamics.webp){width="590"}
