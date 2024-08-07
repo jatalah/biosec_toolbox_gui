@@ -56,8 +56,8 @@ This research was conducted as part of the [Marine Biosecurity ToolBox](https://
 ```{r}
 #| context: server
 
-nodes <- read_rds('nodes.rds')
-edges <- read_rds('edges.rds')
+nodes <- read_rds('combined_nodes_data.rds')
+edges <- read_rds('combined_edges_data.rds')
 
 output$leaflet_map <- renderLeaflet({
 
@@ -71,7 +71,7 @@ edges_data <-
 
 mypal_degree <- colorNumeric(palette = brewer.pal(n = 8, name = "Blues"), domain = nodes_data$degree)
 
-mypal_weight <- colorNumeric(palette = brewer.pal(n = 8, name = "Blues"), domain = edges_data$weight)
+mypal_weight <- colorNumeric(palette = brewer.pal(n = 8, name = "Reds"), domain = edges_data$weight)
 
 leaflet() %>%
   
@@ -130,6 +130,44 @@ leaflet() %>%
 
 ```{r}
 leafletOutput("leaflet_map")
+```
+
+## Plots
+
+```{r}
+#| context: server
+
+plot_data <- read_rds("combined_plot_small_data.rds")
+
+output$plot <- renderPlot({
+  # Ensure the `plot_data` is a list of objects that have `port`, `MNT`, and `plot`
+  filtered_plot_data <- plot_data %>%
+    keep(~ as.character(.x$port) == input$port_options & as.character(.x$MNT) == input$management_options)
+  
+  # Check if any plot matches the filter criteria
+  if (length(filtered_plot_data) == 0) {
+    return(NULL)  # No data available for the selected criteria
+  }
+  
+  # Extract the first matching plot
+  selected_plot <- filtered_plot_data[[1]]$plot +
+    # Modify the plot to adjust font sizes
+    theme(
+      plot.title = element_text(size = 30, face = "bold"),
+      axis.title = element_text(size = 20),
+      axis.text = element_text(size = 18),
+      legend.text = element_text(size = 18),
+      legend.title = element_text(size = 20)
+    )
+  
+  # Render the selected plot
+  print(selected_plot)
+})
+```
+
+
+```{r}
+plotOutput("plot")
 ```
 
 # Bioinvasions {orientation="columns"}
