@@ -18,6 +18,18 @@ library(sf)
 library(leaflet)
 library(shiny)
 library(RColorBrewer)
+library(cowplot)
+
+# Load data
+node_status_plots <- read_rds("node_status_plots.rds")
+
+industry_plots <- read_rds("industry_plots.rds")
+
+nodes <- 
+  read_rds('combined_nodes_data.rds') %>% 
+  mutate(incursion_port = fct_recode(Name, AUK = "Auckland_NZ", TAU =  "Tauranga_NZ", LYT =  "Lyttelton_NZ"))
+  
+edges <- read_rds('combined_edges_data.rds')
 ```
 
 # Networks
@@ -59,12 +71,6 @@ The project is funded by the New Zealand Ministry for Business, Innovation and E
 
 ```{r}
 #| context: server
-
-nodes <- 
-  read_rds('combined_nodes_data.rds') %>% 
-  mutate(incursion_port = fct_recode(Name, AUK = "Auckland_NZ", TAU =  "Tauranga_NZ", LYT =  "Lyttelton_NZ"))
-  
-edges <- read_rds('combined_edges_data.rds')
 
 output$leaflet_map <- renderLeaflet({
 
@@ -187,9 +193,6 @@ output$metric_description <- renderText({
   }
 })
 
-# Load the plot data
-node_status_plots <- read_rds("node_status_plots.rds")
-industry_plots <- read_rds("industry_plots.rds")
 
 # Reactive expression to get the filtered plot data based on Metric_option and Management options
 filtered_plot_data <- reactive({
@@ -221,11 +224,11 @@ output$plot <- renderPlot({
   # Extract the first matching plot
   selected_plot <- plot_data[[1]]$plot +
     theme(
-      axis.title = element_text(size = 20),
-      axis.text = element_text(size = 14),
-      legend.text = element_text(size = 18),
-      legend.title = element_text(size = 18)
-    )
+        axis.title = element_text(size = 18),
+        axis.text = element_text(size = 18),
+        legend.text = element_text(size = 18),
+        legend.title = element_text(size = 18)
+      )
   
   # Render the selected plot
   print(selected_plot)
@@ -237,7 +240,7 @@ output$plot <- renderPlot({
 
 ```{r}
 #| layout-ncol: 1
-div(style = "height: 90vh;", plotOutput("plots"))
+div(style = "height: 90vh;", plotOutput("plot"))
 
 div(style = "height: 10vh;", textOutput("metric_description"))
 ```
@@ -279,11 +282,6 @@ checkboxGroupInput(
 ```{r}
 #| context: server
 
-library(cowplot)  # Add cowplot library
-
-node_status_plots1 <- read_rds("node_status_plots.rds")
-industry_plots1 <- read_rds("industry_plots.rds")
-
 # Reactive text based on Metric_option1
 output$metric_description1 <- renderText({
   if (input$Metric_option1 == "NS") {
@@ -296,9 +294,9 @@ output$metric_description1 <- renderText({
 # Reactive expression to get the filtered plot data based on Metric_option1, management options, and selected ports
 filtered_plot_data1 <- reactive({
   plot_data <- if (input$Metric_option1 == "NS") {
-    node_status_plots1
+    node_status_plots
   } else {
-    industry_plots1
+    industry_plots
   }
   
   # Filter by management options and selected ports
@@ -322,13 +320,18 @@ output$plots1 <- renderPlot({
   }
   
   # Extract the plots from the filtered data
-  plot_list <- lapply(plot_data, function(x) {
+   plot_list <- lapply(plot_data, function(x) {
+    port_name <- ifelse(x$port == "AUK", "Auckland", 
+                        ifelse(x$port == "TAU", "Tauranga", "Lyttelton"))
+    
     x$plot +
+      ggtitle(paste("Port of Incursion:", port_name)) +
       theme(
-        axis.title = element_text(size = 20),
-        axis.text = element_text(size = 14),
+        axis.title = element_text(size = 18),
+        axis.text = element_text(size = 18),
         legend.text = element_text(size = 18),
-        legend.title = element_text(size = 18)
+        legend.title = element_text(size = 18),
+        plot.title = element_text(size = 18)
       )
   })
   
