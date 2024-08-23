@@ -1,11 +1,14 @@
 ---
-title: "Connectivity of fanworm incursions"
+title: "MarPEST: Marine Pest Epidemiological Simulation Tool"
 format: dashboard
 nav-buttons:
       - icon: github
         href: https://github.com/jatalah/biosec_toolbox_gui
 server: shiny
 theme: dafault
+editor: 
+  markdown: 
+    wrap: sentence
 ---
 
 ```{r}
@@ -23,7 +26,7 @@ library(RColorBrewer)
 
 ![](https://www.biosecurity-toolbox.org.nz/wp-content/uploads/sites/176/2020/06/marine-biosecurity-toolbox_logo_100-A.png)
 
-This is a mock Graphical User Interface (GUI) designed to visualise the outputs of a dynamic network model simulating the connectivity between New Zealand's ports following a Mediterranean fanworm, *Sabella spallanzanii*, incursion.
+This MarPEST: Marine Pest Epidemiological Simulation Tool uses vessel traffic to simulate the spread of marine pests from a potential incursion site.
 
 ```{r}
 sliderInput("year_slider", "Year:", 
@@ -47,16 +50,20 @@ selectInput(
 
 ```
 
-This research was conducted as part of the [Marine Biosecurity ToolBox](https://www.biosecurity-toolbox.org.nz/) programme, which is funded by the New Zealand Ministry for Business, Innovation and Employment research grant C01X1511.
+This MarPEST is the result of a 5-year [Marine Biosecurity ToolBox](https://www.biosecurity-toolbox.org.nz/).
+The project is funded by the New Zealand Ministry for Business, Innovation and Employment research grant C01X1511.
 
 ![](https://live.staticflickr.com/3138/2853160957_ab4cc4fcfb_b.jpg){width="302"}
 
-## Connectivity map
+## Map View
 
 ```{r}
 #| context: server
 
-nodes <- read_rds('combined_nodes_data.rds')
+nodes <- 
+  read_rds('combined_nodes_data.rds') %>% 
+  mutate(incursion_port = fct_recode(Name, AUK = "Auckland_NZ", TAU =  "Tauranga_NZ", LYT =  "Lyttelton_NZ"))
+  
 edges <- read_rds('combined_edges_data.rds')
 
 output$leaflet_map <- renderLeaflet({
@@ -73,16 +80,17 @@ mypal_degree <- colorNumeric(palette = brewer.pal(n = 8, name = "Blues"), domain
 
 mypal_weight <- colorNumeric(palette = brewer.pal(n = 8, name = "Reds"), domain = edges_data$weight)
 
-leaflet() %>%
+leaflet(options = leafletOptions(minZoom = 3, maxZoom = 8)) %>%
   
-  addProviderTiles(providers$OpenStreetMap, group = "Street view") %>% # Add Street view Base map
+  addProviderTiles(providers$OpenStreetMap, group = "Street view") %>%
   
-  # addProviderTiles("Stadia.AlidadeSmoothDark") %>% 
+  addProviderTiles("Stadia.AlidadeSmoothDark", group = "Dark") %>%
   
-  addPolylines(data = edges_data, 
-               color = ~mypal_weight(weight),
-               weight = ~sqrt(weight)*50
-               ) %>%
+  addPolylines(
+    data = edges_data,
+    color = ~ mypal_weight(weight),
+    weight = ~ sqrt(weight) * 50
+  ) %>%
   
   addCircles(
     data = nodes_data,
@@ -92,39 +100,40 @@ leaflet() %>%
     popup = ~ paste0(
       Name,
       "<br>",
-      "Degree: ", degree,
+      "Degree: ",
+      degree,
       "<br>",
-      "In degree: ", inDegree,
+      "In degree: ",
+      inDegree,
       "<br>",
-      "Out degree: ", outDegree
+      "Out degree: ",
+      outDegree
     ),
     fillOpacity = 0.7,
-    # fillColor = ~ mypal_degree(degree),
-    fillColor = 'white',
+    fillColor = ~ ifelse(incursion_port == input$port_options, "hotpink", 'white'),
     stroke = T,
     radius = ~ degree * 2.5e3,
-  ) %>% 
+  ) %>%
   
-  setView(173.40, -41, zoom = 6) %>% 
+  setView(173.40, -41, zoom = 6) %>%
   
-   addLegend(
-      title = "Weight",
-      pal = mypal_weight,
-      values = edges_data$weight,
-      position = "bottomright"
-    ) %>% 
+  addLegend(
+    title = "Weight",
+    pal = mypal_weight,
+    values = edges_data$weight,
+    position = "bottomright"
+  ) %>%
   
-  addControl(html = "<div id='map-title'>Sabella Connectivity</div>",
-               position = "topright") %>%
+  addControl(html = "<div id='map-title'>MarPEST</div>", position = "topright") %>%
   
-  addControl(html = "<div id='map-title'>Author: Biosecurity ToolBox</div>",
-               position = "bottomleft") %>%
+  addControl(html = "<div id='map-title'>Author: Biosecurity ToolBox</div>", position = "bottomleft") %>%
   
-  # addLayersControl(baseGroups = c("Street view", "Dark"),
-  #                    options = layersControlOptions(collapsed = F)) %>%
+  addLayersControl(baseGroups = c("Street view", "Dark"),
+                   options = layersControlOptions(collapsed = F)) %>%
   
-  addScaleBar()
-
+  addScaleBar() %>%
+  
+  hideGroup("Dark")
 })
 ```
 
@@ -132,90 +141,284 @@ leaflet() %>%
 leafletOutput("leaflet_map")
 ```
 
+::: {style="font-size:14px; font-weight:normal; background-color:white; padding:5px; margin-top:10px;"}
+In this map, the circles represent destinations, with the incursion site highlighted in hot pink.
+The connections made by vessels between destinations are shown as clockwise arcs.
+The size of circles and arcs are proportional to the level of pest movement.
+:::
+
+# Compare management {orientation="rows" scrolling="false"}
+
+## Inputs {.sidebar}
+
+Compare difference among management scenarios and the business as usual (BAU), with no management.
+The CULL scenario represents population reduction actions at the destinations. The HULL scenario represents cleaning of vessels to reduce the risk of transfer.
+
+```{r}
+selectInput(
+  "management_options1",
+  label = "Management options",
+  choices = c("BAU", 
+              "CULL", 
+              "HULL"),
+  selected = "BAU"
+)
+
+selectInput(
+  "Metric_option",
+  label = "Incursion metrics",
+  choices = c("Node status" = "NS", 
+              "Propagule Pressure" = "PPP"),
+  selected = "NS"
+)
+```
+
 ## Plots
 
 ```{r}
 #| context: server
 
-plot_data <- read_rds("combined_plot_small_data.rds")
+# Reactive text based on Metric_option
+output$metric_description <- renderText({
+  if (input$Metric_option == "NS") {
+    "Node Status: Shows the total number of destinations in which the pest is: a) absent, b) introduced but not yet established and c) established and growing. Destination status is plotted through time. Species spawning activity shown by vertical grey bars. See 'How pests spread…'"
+  } else if (input$Metric_option == "PPP") {
+    "Propagule Pressure plot: Shows the total level of pest introduction across New Zealand’s seascape, partitioned by maritime sectors: Commercial, Recreational, and Aquaculture."
+  }
+})
 
-output$plot <- renderPlot({
-  # Ensure the `plot_data` is a list of objects that have `port`, `MNT`, and `plot`
-  filtered_plot_data <- plot_data %>%
-    keep(~ as.character(.x$port) == input$port_options & as.character(.x$MNT) == input$management_options)
+# Load the plot data
+node_status_plots <- read_rds("node_status_plots.rds")
+industry_plots <- read_rds("industry_plots.rds")
+
+# Reactive expression to get the filtered plot data based on Metric_option and Management options
+filtered_plot_data <- reactive({
+  plot_data <- if (input$Metric_option == "NS") {
+    node_status_plots
+  } else {
+    industry_plots
+  }
   
-  # Check if any plot matches the filter criteria
-  if (length(filtered_plot_data) == 0) {
+  # Filter by management options
+  filtered_data <- plot_data %>%
+    keep(~ as.character(.x$MNT) == input$management_options1)
+  
+  if (length(filtered_data) == 0) {
     return(NULL)  # No data available for the selected criteria
   }
   
+  return(filtered_data)
+})
+
+# Render the plot based on the filtered plot data
+output$plot <- renderPlot({
+  plot_data <- filtered_plot_data()
+  
+  if (is.null(plot_data)) {
+    return(NULL)  # No data available
+  }
+  
   # Extract the first matching plot
-  selected_plot <- filtered_plot_data[[1]]$plot +
-    # Modify the plot to adjust font sizes
+  selected_plot <- plot_data[[1]]$plot +
     theme(
-      plot.title = element_text(size = 30, face = "bold"),
       axis.title = element_text(size = 20),
-      axis.text = element_text(size = 18),
+      axis.text = element_text(size = 14),
       legend.text = element_text(size = 18),
-      legend.title = element_text(size = 20)
+      legend.title = element_text(size = 18)
     )
   
   # Render the selected plot
   print(selected_plot)
 })
+
 ```
 
+## Column
 
 ```{r}
-plotOutput("plot")
+#| layout-ncol: 1
+div(style = "height: 90vh;", plotOutput("plots"))
+
+div(style = "height: 10vh;", textOutput("metric_description"))
 ```
 
-# Bioinvasions {orientation="columns"}
 
-## Bioinvasion process {width="70%"}
+# Compare Start Location {orientation="columns" scrolling="false"}
 
-Random text about bioinvasions process that the model is trying to capture.
+## Inputs {.sidebar}
 
--   **Entrainment**: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultricies dolor vitae est fermentum, nec rutrum nisi congue. Duis consequat quam ac odio blandit, id lobortis mi pharetra. Curabitur vehicula justo nec velit convallis, vitae tristique est luctus. Cras vitae tellus non nisi sollicitudin fermentum. Quisque id feugiat lacus, ut fermentum orci. Nullam convallis interdum orci, eget aliquet lectus gravida ac. Nullam suscipit diam nec lacus vulputate, nec suscipit quam fermentum. Integer scelerisque sapien a orci varius, a convallis odio lacinia. Morbi nec libero nec neque rutrum vulputate. Suspendisse potenti.
+```{r}
+selectInput(
+  "management_options2",
+  label = "Management options",
+  choices = c("BAU", 
+              "CULL", 
+              "HULL"),
+  selected = "BAU"
+)
 
--   **Transport:** Fusce sed fermentum arcu, in suscipit nisi. Integer ac lectus justo. Nulla facilisi. Vestibulum consectetur odio eu ex convallis, nec dapibus tortor consequat. In quis ligula nisi. Aliquam at est eget urna pulvinar faucibus. In hac habitasse platea dictumst. Vivamus vitae purus vestibulum, commodo elit vel, efficitur metus. Nunc pharetra turpis ac nisi molestie, sed ultrices orci ullamcorper. Maecenas aliquet massa in tellus vehicula, id tristique quam eleifend. Cras vel nisi eleifend, efficitur quam ut, hendrerit lectus.
+selectInput(
+  "Metric_option1",
+  label = "Incursion metrics",
+  choices = c("Node status" = "NS", 
+              "Potential Propagule Pressure" = "PPP"),
+  selected = "NS"
+)
 
--   **Introduction:** Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vehicula diam eu libero tincidunt, auctor malesuada ipsum volutpat. Nullam quis sapien consequat, vestibulum ante vel, ullamcorper ipsum. Phasellus gravida magna vel ipsum posuere, non sodales magna tempus. Integer luctus tellus id sapien consequat, quis tincidunt risus volutpat. Proin ut lacus vel lacus venenatis tempor. Sed id dapibus enim.
+checkboxGroupInput(
+  "port_options1",
+  label = "Port of incursion",
+  choices = c("Auckland" = "AUK", "Tauranga" = "TAU", "Lyttelton" = "LYT"),
+  selected = "AUK"
+)
 
--   **Establishment:** Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vehicula diam eu libero tincidunt, auctor malesuada ipsum volutpat. Nullam quis sapien consequat, vestibulum ante vel, ullamcorper ipsum. Phasellus gravida magna vel ipsum posuere, non sodales magna tempus. Integer luctus tellus id sapien consequat, quis tincidunt risus volutpat. Proin ut lacus vel lacus venenatis tempor. Sed id dapibus enim.
+```
 
-## Infografic {width="30%"}
+## Plots
+
+```{r}
+#| context: server
+
+library(cowplot)  # Add cowplot library
+
+node_status_plots1 <- read_rds("node_status_plots.rds")
+industry_plots1 <- read_rds("industry_plots.rds")
+
+# Reactive text based on Metric_option1
+output$metric_description1 <- renderText({
+  if (input$Metric_option1 == "NS") {
+    "Node Status: Shows the total number of destinations in which the pest is: a) absent, b) introduced but not yet established, and c) established and growing. Destination status is plotted through time. Species spawning activity shown by vertical grey bars."
+  } else if (input$Metric_option1 == "PPP") {
+    "Propagule Pressure plot: Shows the total level of pest introduction across New Zealand’s seascape, partitioned by maritime sectors: Commercial, Recreational, and Aquaculture."
+  }
+})
+
+# Reactive expression to get the filtered plot data based on Metric_option1, management options, and selected ports
+filtered_plot_data1 <- reactive({
+  plot_data <- if (input$Metric_option1 == "NS") {
+    node_status_plots1
+  } else {
+    industry_plots1
+  }
+  
+  # Filter by management options and selected ports
+  filtered_data <- plot_data %>%
+    keep(~ as.character(.x$MNT) == input$management_options2 & 
+         as.character(.x$port) %in% input$port_options1)
+  
+  if (length(filtered_data) == 0) {
+    return(NULL)  # No data available for the selected criteria
+  }
+  
+  return(filtered_data)
+})
+
+# Render the plot based on the filtered plot data
+output$plots1 <- renderPlot({
+  plot_data <- filtered_plot_data1()
+  
+  if (is.null(plot_data)) {
+    return(NULL)  # No data available
+  }
+  
+  # Extract the plots from the filtered data
+  plot_list <- lapply(plot_data, function(x) {
+    x$plot +
+      theme(
+        axis.title = element_text(size = 20),
+        axis.text = element_text(size = 14),
+        legend.text = element_text(size = 18),
+        legend.title = element_text(size = 18)
+      )
+  })
+  
+  # Combine the plots using cowplot
+  combined_plot <- plot_grid(plotlist = plot_list, align = "v", ncol = 1)
+  
+  # Render the combined plot
+  print(combined_plot)
+})
+
+
+```
+
+## Column
+
+```{r}
+#| layout-ncol: 1
+div(style = "height: 90vh;", plotOutput("plots1"))
+
+div(style = "height: 10vh;", textOutput("metric_description1"))
+```
+
+
+# How it works
+
+**How are we modelling invasion dynamics?**
+
+We start an incursion at a chosen location and allow it to grow based on the species’ biology.
+The pest population spawns and attach to vessels which are then carried throughout the seascape.
+These pests can then be released into other destinations.
+The pest populations can then die or grow to attach to other vessels and the process repeats.
+In this way we can simulate the spread of marine pests.
+o How are we modelling vessel movements?
+We gathered vessel movement data for three maritime sectors: Commercial, Recreational, and Aquaculture.
+We are modelling the average daily movement of hull area around New Zealand in a typical year.
+We are not tracking individual vessels or individual organisms in this simulator.
+
+**How are we modelling species?**
+
+A pest in the model is represented by species-specific attributes, including: population growth rate, spawning window, fecundity, transport mode, and mortality rate.
+We are modelling populations at destinations and how they are transferred among destinations through propagule pressure.
+We then track the New Zealand wide population trajectory.
+We do not include ecological interactions like competition or environmental tolerances such as temperature or salinity.
+
+**How do we measure the potential spread of pest?**
+
+We currently represent spread and incursion risk in three ways:
+
+-   **Map View**: All spread dynamics, destinations, connections and management scenarios can be visualised on the interactive map of New Zealand.
+    In this map, we show the destination level propagule pressure and how it moves through the seascape.
+
+-   **Destination Status**: We track the spread of the pest through the number of destinations over time.
+    We show the total number of destinations in which the pest is: a) absent, b) introduced but not yet established and c) established and growing.
+    Destination status is plotted through time.
+
+-   **Potential Propagule Pressure** (PPP): We calculate the total level of propagule pressure introduced across New Zealand’s seascape, partitioned by maritime sectors: Commercial, Recreational, and Aquaculture.
+
+We use these three representations of potential spread to compare and contrast management scenarios (BAU, CULL, HULL) and starting locations.
+
+# How pest spread {orientation="columns"}
+
+Biological invasions are a complex interaction between wildlife and human activities that move species around.
+When a species is moved outside of its historical native range, it can become a pest in its new environment and damage ecological, environmental, social, and cultural values.
+As a result, it’s important to understand how the invasion process occurs and how to minimize inadvertent and unwanted movements of plants and animals.
+
+The invasion process can be broken down into five steps, and this can often involve ships and boats in marine ecosystems
+
+**Entrainment**: At a source location (starting point), marine plants and animals can attach to vessel hulls, or equipment, or become entrained in ballast or bilge water.
+This begins a process of human-assisted movement.
+
+**Transport**: In many cases, marine species are resilient enough to hang on or survive transport conditions.
+This can include short coastal transits or longer voyages in the open ocean.
+It can also include being on the outside of a vessel (as biofouling) or inside a vessel (in ballast water, for example).
+If organisms can survive a voyage or multiple voyages, they will arrive at new destinations with the vessel.
+
+**Introduction**: At some point during a vessels stay in a port, marina, or anchorage, a species may have the opportunity to jump off, reproduce, or be actively discharged into the new environment at the destination.
+There are several cases when changes in water temperature, salinity or other factor might trigger a species to spawn or release propagules.
+The newly released individuals may then become a starting point for a newly established population (a new invasion at that location).
+
+**Establishment**: Newly arrived individuals must survive, grow, and reproduce in their new environment.
+Once new generations of the species have been able to take hold, the species is considered established as it can now remain in the new environment without needing new individuals to arrive to keep the population going.
+
+**Spread**: Once established, a pest population can spread by moving itself, with coastal currents, or by attaching to other vessels and continuing the invasion process.
+In this way, a marine species can increase its new non-native range (its footprint) around the seascape.
+
+**MarPEST** is designed to help us understand the trajectory of marine invasions in New Zealand.
+Simulations can provide insights into important components of vessel networks and locations that contribute to invasive spread.
+It may also inform biosecurity decisions regarding how to reduce spread rates or develop strategies to control and manage invasive species to reduce their impacts.
+
+## Column {width="30%"}
 
 ![](images/infographic%20-%20Propagule%20pressure%20RGB.webp)
 
-Infografic credit: [Hilliam K, Floerl O, and Treml EA. 2024. Priorities for improving predictions of vessel-mediated marine invasions. Science of The Total Environment: 171162.](https://www.sciencedirect.com/science/article/pii/S0048969724013019?dgcid=author)
-
-# Dynamics
-
-## Species dynamics
-
-### Column {width="70%"}
-
-Projecting surrounded literature yet delightful alteration but bed men. Open are from long why cold. If must snug by upon sang loud left. As me do preference entreaties compliment motionless ye literature. Day behaviour explained law remainder. Produce can cousins account you pasture. Peculiar delicate an pleasant provided do perceive.
-
-At every tiled on ye defer do. No attention suspected oh difficult. Fond his say old meet cold find come whom. The sir park sake bred. Wonder matter now can estate esteem assure fat roused. Am performed on existence as discourse is. Pleasure friendly at marriage blessing or.
-
-Ladies others the six desire age. Bred am soon park past read by lain. As excuse eldest no moment. An delight beloved up garrets am cottage private. The far attachment discovered celebrated decisively surrounded for and. Sir new the particular frequently indulgence excellence how. Wishing an if he sixteen visited tedious subject it. Mind mrs yet did quit high even you went. Sex against the two however not nothing prudent colonel greater. Up husband removed parties staying he subject mr.
-
-### Column {width="30%"}
-
-![](images/species_dynamics.webp){width="589"}
-
-## Vessel dynamics
-
-### Column {width="70%"}
-
-Dashwood contempt on mr unlocked resolved provided of of. Stanhill wondered it it welcomed oh. Hundred no prudent he however smiling at an offence. If earnestly extremity he he propriety something admitting convinced ye. Pleasant in to although as if differed horrible. Mirth his quick its set front enjoy hoped had there. Who connection imprudence middletons too but increasing celebrated principles joy. Herself too improve gay winding ask expense are compact. New all paid few hard pure she.
-
-Led ask possible mistress relation elegance eat likewise debating. By message or am nothing amongst chiefly address. The its enable direct men depend highly. Ham windows sixteen who inquiry fortune demands. Is be upon sang fond must shew. Really boy law county she unable her sister. Feet you off its like like six. Among sex are leave law built now. In built table in an rapid blush. Merits behind on afraid or warmly.
-
-Is be upon sang fond must shew. Really boy law county she unable her sister. Feet you off its like like six. Among sex are leave law built now. In built table in an rapid blush. Merits behind on afraid or warmly.
-
-### Column {width="30%"}
-
-![](images/vessel_dynamics.webp){width="590"}
