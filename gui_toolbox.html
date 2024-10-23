@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>MarPEST: Marine Pest Epidemiological Simulation Tool</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="gui_toolbox_files/libs/clipboard/clipboard.min.js"></script>
+<script src="gui_toolbox_files/libs/quarto-html/quarto.js"></script>
+<script src="gui_toolbox_files/libs/quarto-html/popper.min.js"></script>
+<script src="gui_toolbox_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="gui_toolbox_files/libs/quarto-html/anchor.min.js"></script>
+<link href="gui_toolbox_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="gui_toolbox_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="gui_toolbox_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="gui_toolbox_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="gui_toolbox_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="gui_toolbox_files/libs/quarto-dashboard/quarto-dashboard.js"></script>
+<script src="gui_toolbox_files/libs/quarto-dashboard/stickythead.js"></script>
+<script src="gui_toolbox_files/libs/quarto-dashboard/datatables.min.js" kdttablesentinel="true"></script>
+<script src="gui_toolbox_files/libs/quarto-dashboard/pdfmake.min.js" kdttablesentinel="true"></script>
+<script src="gui_toolbox_files/libs/quarto-dashboard/vfs_fonts.js" kdttablesentinel="true"></script>
+<script src="gui_toolbox_files/libs/quarto-dashboard/web-components.js" type="module"></script>
+<script src="gui_toolbox_files/libs/quarto-dashboard/components.js"></script>
+<link href="gui_toolbox_files/libs/quarto-dashboard/datatables.min.css" rel="stylesheet" kdttablesentinel="true">
+
+
+</head>
+
+<body class="quarto-dashboard dashboard-fill dashboard-sidebar fullcontent">
+
+<header id="quarto-dashboard-header">
+<nav class="navbar navbar-expand-md slim" data-bs-theme="dark">
+  <div class="navbar-container container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-controls="dashboard-collapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>    
+
+
+    <div class="navbar-brand-container">       
+
+      <div class="navbar-title">
+        <div class="navbar-title-text"><a href="#">MarPEST: Marine Pest Epidemiological Simulation Tool</a></div>
+        
+        
+      </div>
+    </div>
+<div id="dashboard-collapse" class="navbar-collapse collapse"><ul class="navbar-nav navbar-nav-scroll me-auto" role="tablist"><li class="nav-item" role="presentation"><a id="tab-networks" class="nav-link active" data-bs-toggle="tab" role="tab" data-bs-target="#networks" data-scrolling="false" href="#networks" aria-controls="networks" aria-selected="true"><span class="nav-link-text">Networks</span></a></li><li class="nav-item" role="presentation"><a id="tab-compare-management" class="nav-link" data-bs-toggle="tab" role="tab" data-bs-target="#compare-management" data-scrolling="false" href="#compare-management" aria-controls="compare-management" aria-selected="false"><span class="nav-link-text">Compare management</span></a></li><li class="nav-item" role="presentation"><a id="tab-compare-start-location" class="nav-link" data-bs-toggle="tab" role="tab" data-bs-target="#compare-start-location" data-scrolling="false" href="#compare-start-location" aria-controls="compare-start-location" aria-selected="false"><span class="nav-link-text">Compare Start Location</span></a></li><li class="nav-item" role="presentation"><a id="tab-how-it-works" class="nav-link" data-bs-toggle="tab" role="tab" data-bs-target="#how-it-works" data-scrolling="false" href="#how-it-works" aria-controls="how-it-works" aria-selected="false"><span class="nav-link-text">How it works</span></a></li><li class="nav-item" role="presentation"><a id="tab-how-pests-spread" class="nav-link" data-bs-toggle="tab" role="tab" data-bs-target="#how-pests-spread" data-scrolling="false" href="#how-pests-spread" aria-controls="how-pests-spread" aria-selected="false"><span class="nav-link-text">How pests spread</span></a></li></ul><div class="quarto-dashboard-links"><a class="quarto-dashboard-link" href="https://github.com/jatalah/biosec_toolbox_gui"><i class="bi bi-github"></i></a></div></div></div>
+</nav>
+</header>
+<div class="page-layout-custom quarto-dashboard-content bslib-gap-spacing html-fill-container bslib-page-fill quarto-dashboard-pages">  
+
+<div class="bslib-grid-item html-fill-item tab-content bslib-grid" data-layout="fill" style="display: grid; grid-template-rows: minmax(3em, 1fr); grid-auto-columns: minmax(0, 1fr);">
+<div id="networks" class="dashboard-page tab-pane show active html-fill-item html-fill-container dashboard-sidebar-container" data-orientation="rows" aria-labelledby="tab-networks">
+<div class="bslib-sidebar-layout html-fill-item html-fill-container" data-bslib-sidebar-open="desktop" data-bslib-sidebar-init="true" data-bslib-sidebar-border="false" data-bslib-sidebar-border-radius="false"><div class="main html-fill-container html-fill-item"><div class="sidebar-content html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-columns: minmax(3em, 1fr);
+grid-auto-rows: minmax(0, 1fr);">
+<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-rows: minmax(3em, 1fr) minmax(3em, max-content); grid-auto-columns: minmax(0, 1fr);">
+<div class="card cell html-fill-item html-fill-container bslib-card" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
+<div class="card-body html-fill-item html-fill-container">
+<div class="cell-output-display html-fill-item html-fill-container">
+<div class="leaflet html-widget html-widget-output shiny-report-size html-fill-item html-fill-container" id="leaflet_map" style="width:100%;height:400px;"></div>
+</div>
+</div>
+<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
+    <template>Expand</template>
+    <span class="bslib-full-screen-enter badge rounded-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
+    </span>
+</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
+<div class="card html-fill-item html-fill-container bslib-card" data-fill="false" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
+<div class="card-body html-fill-item html-fill-container">
+<div style="font-size:14px; font-weight:normal; background-color:white; padding:5px; margin-top:10px;" class="html-fill-item html-fill-container">
+<p>In this map, the circles represent destinations, with the incursion site highlighted in hot pink. The connections made by vessels between destinations are shown as clockwise arcs. The size of circles and arcs are proportional to the level of pest movement. Each circle has a pop up label that includes statistics about that site in that timestep: ‘Annual stablished’ shows the relative area of propagule pressure established at that location, ‘In degree’ represents the number of other sites this location is receiving propagule pressure from. A high in degree can indicate risk of a population establishing or growing larger. ‘Out degree’ represents the number of other sites this location is delivering propagule pressure to. A high out degree can indicate this site is influential in propagating spread.</p>
+</div>
+</div>
+<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
+    <template>Expand</template>
+    <span class="bslib-full-screen-enter badge rounded-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
+    </span>
+</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
+</div>
+</div>
+</div></div><aside id="bslib-sidebar-1" class="sidebar html-fill-container html-fill-item"><div class="html-fill-item html-fill-container">
+<p><img src="https://www.biosecurity-toolbox.org.nz/wp-content/uploads/sites/176/2020/06/marine-biosecurity-toolbox_logo_100-A.png" class="img-fluid"></p>
+<p>This MarPEST: Marine Pest Epidemiological Simulation Tool uses vessel traffic to simulate the spread of marine pests from a potential incursion site.</p>
+<div class="cell-output-display">
+<div class="form-group shiny-input-container no-baseline">
+<label class="control-label" id="year_slider-label" for="year_slider">Year:</label>
+<input class="js-range-slider" id="year_slider" data-skin="shiny" data-min="1" data-max="10" data-from="3" data-step="1" data-grid="true" data-grid-num="9" data-grid-snap="false" data-prettify-separator="," data-prettify-enabled="true" data-keyboard="true" data-data-type="number">
+</div>
+</div>
+<div class="cell-output-display no-overflow-x">
+<div class="form-group shiny-input-container">
+<label class="control-label" id="management_options-label" for="management_options">Management options</label>
+<div>
+<select id="management_options" class="shiny-input-select"><option value="BAU" selected="">Business as usual</option>
+<option value="CULL">Population culling</option>
+<option value="HULL">Hull cleaning</option></select>
+<script type="application/json" data-for="management_options" data-nonempty="">{"plugins":["selectize-plugin-a11y"]}</script>
+</div>
+</div>
+</div>
+<div class="cell-output-display no-overflow-x">
+<div class="form-group shiny-input-container">
+<label class="control-label" id="port_options-label" for="port_options">Port of incursion</label>
+<div>
+<select id="port_options" class="shiny-input-select"><option value="AUK" selected="">Auckland</option>
+<option value="BLF">Bluff</option>
+<option value="BOI">Bay of Islands</option>
+<option value="CDL">Coromandel</option>
+<option value="DUN">Dunedin</option>
+<option value="GBI">Great Barrier Island</option>
+<option value="GIS">Gisborne</option>
+<option value="GMI">Great Mercury Island</option>
+<option value="HVK">Havelock</option>
+<option value="LYT">Lyttelton</option>
+<option value="MBS">Marlborough Sounds</option>
+<option value="MFD">Milford Sound</option>
+<option value="NEL">Nelson</option>
+<option value="NPR">Napier</option>
+<option value="NPY">New Plymouth</option>
+<option value="PCN">Picton</option>
+<option value="STW">Stewart Island</option>
+<option value="TAU">Tauranga</option>
+<option value="TIM">Timaru</option>
+<option value="WEL">Wellington</option>
+<option value="WGI">Whangarei</option></select>
+<script type="application/json" data-for="port_options" data-nonempty="">{"plugins":["selectize-plugin-a11y"]}</script>
+</div>
+</div>
+</div>
+<p>This MarPEST is the result of a 5-year <a href="https://www.biosecurity-toolbox.org.nz/">Marine Biosecurity ToolBox</a>. The project is funded by the New Zealand Ministry for Business, Innovation and Employment research grant C01X1511.</p>
+<p><img src="https://live.staticflickr.com/3138/2853160957_ab4cc4fcfb_b.jpg" class="img-fluid" width="302"></p>
+</div></aside>
+<button class="collapse-toggle" type="button" title="Toggle sidebar" aria-expanded="true" aria-controls="bslib-sidebar-1">
+    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" class="bi bi-chevron-left collapse-icon" style="fill:currentColor;" aria-hidden="true" role="img">
+      <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"></path>
+    </svg>
+</button>
+<script data-bslib-sidebar-init="">
+bslib.Sidebar.initCollapsibleAll()
+</script>
+</div>
+</div>
+<div id="compare-management" class="dashboard-page tab-pane grid-skip html-fill-item html-fill-container dashboard-sidebar-container" data-scrolling="false" data-orientation="rows" aria-labelledby="tab-compare-management">
+<div class="bslib-sidebar-layout html-fill-item html-fill-container" data-bslib-sidebar-open="desktop" data-bslib-sidebar-init="true"><div class="main html-fill-container html-fill-item"><div class="sidebar-content html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-columns: minmax(3em, 1fr);
+grid-auto-rows: minmax(0, 1fr);">
+<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-rows: minmax(3em, 1fr); grid-auto-columns: minmax(0, 1fr);">
+<div class="card cell html-fill-item html-fill-container bslib-card" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
+<div class="card-body html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+
+</div>
+<div class="cell quarto-layout-panel html-fill-item html-fill-container" data-layout-ncol="1">
+<div class="quarto-layout-row html-fill-item html-fill-container">
+<div class="quarto-layout-cell html-fill-item html-fill-container" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div style="height: 90vh;" class="html-fill-item html-fill-container">
+<div class="shiny-plot-output html-fill-item html-fill-container" id="plot" style="width:100%;height:400px;"></div>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row html-fill-item html-fill-container">
+<div class="quarto-layout-cell html-fill-item html-fill-container" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div style="height: 10vh;" class="html-fill-item html-fill-container">
+<div id="metric_description" class="shiny-text-output html-fill-item html-fill-container"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
+    <template>Expand</template>
+    <span class="bslib-full-screen-enter badge rounded-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
+    </span>
+</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
+</div>
+</div>
+</div></div><aside id="bslib-sidebar-2" class="sidebar html-fill-container html-fill-item"><div class="html-fill-item html-fill-container">
+<p>Compare difference among management scenarios and the business as usual (BAU), with no management. The CULL scenario represents population reduction actions at the destinations. The HULL scenario represents cleaning of vessels to reduce the risk of transfer.</p>
+<div class="cell-output-display no-overflow-x">
+<div class="form-group shiny-input-container">
+<label class="control-label" id="port_options1-label" for="port_options1">Port of incursion</label>
+<div>
+<select id="port_options1" class="shiny-input-select"><option value="AUK" selected="">Auckland</option>
+<option value="BLF">Bluff</option>
+<option value="BOI">Bay of Islands</option>
+<option value="CDL">Coromandel</option>
+<option value="DUN">Dunedin</option>
+<option value="GBI">Great Barrier Island</option>
+<option value="GIS">Gisborne</option>
+<option value="GMI">Great Mercury Island</option>
+<option value="HVK">Havelock</option>
+<option value="LYT">Lyttelton</option>
+<option value="MBS">Marlborough Sounds</option>
+<option value="MFD">Milford Sound</option>
+<option value="NEL">Nelson</option>
+<option value="NPR">Napier</option>
+<option value="NPY">New Plymouth</option>
+<option value="PCN">Picton</option>
+<option value="STW">Stewart Island</option>
+<option value="TAU">Tauranga</option>
+<option value="TIM">Timaru</option>
+<option value="WEL">Wellington</option>
+<option value="WGI">Whangarei</option></select>
+<script type="application/json" data-for="port_options1" data-nonempty="">{"plugins":["selectize-plugin-a11y"]}</script>
+</div>
+</div>
+</div>
+<div class="cell-output-display no-overflow-x">
+<div class="form-group shiny-input-container">
+<label class="control-label" id="Metric_option1-label" for="Metric_option1">Incursion metrics</label>
+<div>
+<select id="Metric_option1" class="shiny-input-select"><option value="NS" selected="">Node status</option>
+<option value="PPP">Propagule Pressure</option></select>
+<script type="application/json" data-for="Metric_option1" data-nonempty="">{"plugins":["selectize-plugin-a11y"]}</script>
+</div>
+</div>
+</div>
+</div></aside>
+<button class="collapse-toggle" type="button" title="Toggle sidebar" aria-expanded="true" aria-controls="bslib-sidebar-2">
+    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" class="bi bi-chevron-left collapse-icon" style="fill:currentColor;" aria-hidden="true" role="img">
+      <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"></path>
+    </svg>
+</button>
+<script data-bslib-sidebar-init="">
+bslib.Sidebar.initCollapsibleAll()
+</script>
+</div>
+</div>
+<div id="compare-start-location" class="dashboard-page tab-pane grid-skip html-fill-item html-fill-container dashboard-sidebar-container" data-scrolling="false" data-orientation="columns" aria-labelledby="tab-compare-start-location">
+<div class="bslib-sidebar-layout html-fill-item html-fill-container" data-bslib-sidebar-open="desktop" data-bslib-sidebar-init="true"><div class="main html-fill-container html-fill-item"><div class="sidebar-content html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-columns: minmax(3em, 70fr) minmax(3em, 30fr);
+grid-auto-rows: minmax(0, 1fr);">
+<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-rows: minmax(3em, 1fr); grid-auto-columns: minmax(0, 1fr);">
+<div class="card cell html-fill-item html-fill-container bslib-card" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
+<div class="card-body html-fill-item html-fill-container">
+<div class="html-fill-item html-fill-container">
+
+</div>
+<div class="cell quarto-layout-panel html-fill-item html-fill-container" data-layout-ncol="1">
+<div class="quarto-layout-row html-fill-item html-fill-container">
+<div class="quarto-layout-cell html-fill-item html-fill-container" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div style="height: 90vh;" class="html-fill-item html-fill-container">
+<div class="shiny-plot-output html-fill-item html-fill-container" id="plots2" style="width:100%;height:400px;"></div>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row html-fill-item html-fill-container">
+<div class="quarto-layout-cell html-fill-item html-fill-container" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div style="height: 10vh;" class="html-fill-item html-fill-container">
+<div id="metric_description2" class="shiny-text-output html-fill-item html-fill-container"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
+    <template>Expand</template>
+    <span class="bslib-full-screen-enter badge rounded-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
+    </span>
+</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
+</div><div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-rows: minmax(3em, 1fr); grid-auto-columns: minmax(0, 1fr);">
+<div class="card cell html-fill-item html-fill-container bslib-card" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
+<div class="card-body html-fill-item html-fill-container">
+<div class="cell-output-display html-fill-item html-fill-container no-overflow-x">
+<div id="filtered_table" class="shiny-html-output html-fill-item html-fill-container"></div>
+</div>
+</div>
+<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
+    <template>Expand</template>
+    <span class="bslib-full-screen-enter badge rounded-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
+    </span>
+</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
+</div>
+</div>
+</div></div><aside id="bslib-sidebar-3" class="sidebar html-fill-container html-fill-item"><div class="html-fill-item html-fill-container">
+<div class="cell-output-display no-overflow-x">
+<div class="form-group shiny-input-container">
+<label class="control-label" id="port_options2-label" for="port_options2">Select up to 3 Ports to compare</label>
+<div>
+<select class="shiny-input-select form-control" id="port_options2" multiple="multiple"><option value="AUK" selected="">Auckland</option>
+<option value="BLF">Bluff</option>
+<option value="BOI">Bay of Islands</option>
+<option value="CDL">Coromandel</option>
+<option value="DUN">Dunedin</option>
+<option value="GBI">Great Barrier Island</option>
+<option value="GIS">Gisborne</option>
+<option value="GMI">Great Mercury Island</option>
+<option value="HVK">Havelock</option>
+<option value="LYT">Lyttelton</option>
+<option value="MBS">Marlborough Sounds</option>
+<option value="MFD">Milford Sound</option>
+<option value="NEL">Nelson</option>
+<option value="NPR">Napier</option>
+<option value="NPY">New Plymouth</option>
+<option value="PCN">Picton</option>
+<option value="STW">Stewart Island</option>
+<option value="TAU">Tauranga</option>
+<option value="TIM">Timaru</option>
+<option value="WEL">Wellington</option>
+<option value="WGI">Whangarei</option></select>
+<script type="application/json" data-for="port_options2">{"maxItems":3,"plugins":["selectize-plugin-a11y"]}</script>
+</div>
+</div>
+</div>
+<div class="cell-output-display no-overflow-x">
+<div class="form-group shiny-input-container">
+<label class="control-label" id="management_options2-label" for="management_options2">Management options</label>
+<div>
+<select id="management_options2" class="shiny-input-select"><option value="BAU" selected="">Business as usual</option>
+<option value="CULL">Population culling</option>
+<option value="HULL">Hull cleaning</option></select>
+<script type="application/json" data-for="management_options2" data-nonempty="">{"plugins":["selectize-plugin-a11y"]}</script>
+</div>
+</div>
+</div>
+<div class="cell-output-display no-overflow-x">
+<div class="form-group shiny-input-container">
+<label class="control-label" id="Metric_option2-label" for="Metric_option2">Incursion metrics</label>
+<div>
+<select id="Metric_option2" class="shiny-input-select"><option value="NS" selected="">Node status</option>
+<option value="PPP">Potential Propagule Pressure</option></select>
+<script type="application/json" data-for="Metric_option2" data-nonempty="">{"plugins":["selectize-plugin-a11y"]}</script>
+</div>
+</div>
+</div>
+</div></aside>
+<button class="collapse-toggle" type="button" title="Toggle sidebar" aria-expanded="true" aria-controls="bslib-sidebar-3">
+    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" class="bi bi-chevron-left collapse-icon" style="fill:currentColor;" aria-hidden="true" role="img">
+      <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"></path>
+    </svg>
+</button>
+<script data-bslib-sidebar-init="">
+bslib.Sidebar.initCollapsibleAll()
+</script>
+</div>
+</div>
+<div id="how-it-works" class="dashboard-page tab-pane grid-skip html-fill-item html-fill-container" data-orientation="rows" aria-labelledby="tab-how-it-works">
+<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-rows: minmax(3em, max-content); grid-auto-columns: minmax(0, 1fr);">
+<div class="card html-fill-item html-fill-container bslib-card" data-fill="false" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
+<div class="card-body html-fill-item html-fill-container">
+<strong>How are we modelling invasion dynamics?</strong>
+<p>We start an incursion at a chosen location and allow it to grow based on the species’ biology. The pest population spawns and attach to vessels which are then carried throughout the seascape. These pests can then be released into other destinations. The pest populations can then die or grow to attach to other vessels and the process repeats. In this way we can simulate the spread of marine pests. o How are we modelling vessel movements? We gathered vessel movement data for three maritime sectors: Commercial, Recreational, and Aquaculture. We are modelling the average daily movement of hull area around New Zealand in a typical year. We are not tracking individual vessels or individual organisms in this simulator.</p>
+<strong>How are we modelling species?</strong>
+<p>A pest in the model is represented by species-specific attributes, including: population growth rate, spawning window, fecundity, transport mode, and mortality rate. We are modelling populations at destinations and how they are transferred among destinations through propagule pressure. We then track the New Zealand wide population trajectory. We do not include ecological interactions like competition or environmental tolerances such as temperature or salinity.</p>
+<strong>How do we measure the potential spread of pest?</strong>
+<p>We currently represent spread and incursion risk in three ways:</p>
+<ul>
+<li><p><strong>Map View</strong>: All spread dynamics, destinations, connections and management scenarios can be visualised on the interactive map of New Zealand. In this map, we show the destination level propagule pressure and how it moves through the seascape.</p></li>
+<li><p><strong>Destination Status</strong>: We track the spread of the pest through the number of destinations over time. We show the total number of destinations in which the pest is: a) absent, b) introduced but not yet established and c) established and growing. Destination status is plotted through time.</p></li>
+<li><p><strong>Potential Propagule Pressure</strong> (PPP): We calculate the total level of propagule pressure introduced across New Zealand’s seascape, partitioned by maritime sectors: Commercial, Recreational, and Aquaculture.</p></li>
+</ul>
+<p>We use these three representations of potential spread to compare and contrast management scenarios (BAU, CULL, HULL) and starting locations.</p>
+</div>
+<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
+    <template>Expand</template>
+    <span class="bslib-full-screen-enter badge rounded-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
+    </span>
+</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
+</div>
+</div>
+<div id="how-pests-spread" class="dashboard-page tab-pane grid-skip html-fill-item html-fill-container" data-orientation="columns" aria-labelledby="tab-how-pests-spread">
+<div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-columns: minmax(3em, 70fr) minmax(3em, 30fr);
+grid-auto-rows: minmax(0, 1fr);">
+<div class="card html-fill-item html-fill-container bslib-card" data-fill="false" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
+<div class="card-body html-fill-item html-fill-container">
+<p>Biological invasions are a complex interaction between wildlife and human activities that move species around. When a species is moved outside of its historical native range, it can become a pest in its new environment and damage ecological, environmental, social, and cultural values. As a result, it’s important to understand how the invasion process occurs and how to minimize inadvertent and unwanted movements of plants and animals.</p>
+<p>The invasion process can be broken down into five steps, and this can often involve ships and boats in marine ecosystems</p>
+<p><strong>Entrainment</strong>: At a source location (starting point), marine plants and animals can attach to vessel hulls, or equipment, or become entrained in ballast or bilge water. This begins a process of human-assisted movement.</p>
+<p><strong>Transport</strong>: In many cases, marine species are resilient enough to hang on or survive transport conditions. This can include short coastal transits or longer voyages in the open ocean. It can also include being on the outside of a vessel (as biofouling) or inside a vessel (in ballast water, for example). If organisms can survive a voyage or multiple voyages, they will arrive at new destinations with the vessel.</p>
+<p><strong>Introduction</strong>: At some point during a vessels stay in a port, marina, or anchorage, a species may have the opportunity to jump off, reproduce, or be actively discharged into the new environment at the destination. There are several cases when changes in water temperature, salinity or other factor might trigger a species to spawn or release propagules. The newly released individuals may then become a starting point for a newly established population (a new invasion at that location).</p>
+<p><strong>Establishment</strong>: Newly arrived individuals must survive, grow, and reproduce in their new environment. Once new generations of the species have been able to take hold, the species is considered established as it can now remain in the new environment without needing new individuals to arrive to keep the population going.</p>
+<p><strong>Spread</strong>: Once established, a pest population can spread by moving itself, with coastal currents, or by attaching to other vessels and continuing the invasion process. In this way, a marine species can increase its new non-native range (its footprint) around the seascape.</p>
+<p><strong>MarPEST</strong> is designed to help us understand the trajectory of marine invasions in New Zealand. Simulations can provide insights into important components of vessel networks and locations that contribute to invasive spread. It may also inform biosecurity decisions regarding how to reduce spread rates or develop strategies to control and manage invasive species to reduce their impacts.</p>
+</div>
+<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
+    <template>Expand</template>
+    <span class="bslib-full-screen-enter badge rounded-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
+    </span>
+</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div><div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-rows: minmax(3em, max-content); grid-auto-columns: minmax(0, 1fr);">
+<div class="card html-fill-item html-fill-container bslib-card" data-fill="false" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
+<div class="card-body html-fill-item html-fill-container">
+<img src="images/infographic%20-%20Propagule%20pressure%20RGB.webp" class="img-fluid">
+</div>
+<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
+    <template>Expand</template>
+    <span class="bslib-full-screen-enter badge rounded-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
+    </span>
+</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
+<div id="3ade8a4a-fb1d-4a6c-8409-ac45482d5fc9" class="hidden html-fill-item html-fill-container">
+
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>
+<script type="application/shiny-prerendered" data-context="server-start">
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(leaflet)
+library(sf)
+library(RColorBrewer)
+library(ggpubr)
+
+# Load data
+nodes <-  read_rds('combined_nodes_data.rds') 
+edges <- read_rds('combined_edges_data.rds')
+
+
+node_status_plots <- read_rds("node_status_plots.rds")
+industry_plots <- read_rds("industry_plots.rds")
+
+industry_data <- read_csv('industry_tables.csv')
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+output$leaflet_map <- renderLeaflet({
+
+  # Filter nodes and edges data based on user inputs
+  nodes_data <- 
+    nodes %>% 
+    filter(year == input$year_slider & MNT == input$management_options & port == input$port_options) 
+
+  edges_data <- 
+    edges %>% 
+    filter(year == input$year_slider & MNT == input$management_options & port == input$port_options)
+
+  # Create a color palette for annualEstablished
+  mypal_annualEstablished <- colorNumeric(
+    palette = brewer.pal(n = 9, name = "Blues"),
+    domain = nodes_data$annualEstablished
+  )
+
+  # Create Leaflet map
+  leaflet(options = leafletOptions(minZoom = 3, maxZoom = 8)) %>%
+    
+    addProviderTiles(providers$OpenStreetMap, group = "Street view") %>%
+    addProviderTiles("Stadia.AlidadeSmoothDark", group = "Dark") %>%
+    
+    # Add polylines for edges data
+    addPolylines(
+      data = edges_data,
+      color = 'darkred',
+      weight = ~ sqrt(weight) * 5  # Adjusted weight scaling
+    ) %>%
+    
+    # Add circles for nodes data
+    addCircles(
+      data = nodes_data,
+      color = 'black',
+      label = ~ Name,
+      weight = 1,
+      fillOpacity = 1,
+      fillColor = ~ ifelse(
+        incursionNode == 1,
+        "hotpink",
+        mypal_annualEstablished(annualEstablished)  # Use original values for fill color
+      ),
+      stroke = TRUE,
+      popup = ~ paste0(
+        Name,
+        "<br>",
+        "Degree: ",
+        annualEstablished,
+        "<br>",
+        "Annual established: ",
+        degree,
+        "<br>",
+        "In degree: ",
+        inDegree,
+        "<br>",
+        "Out degree: ",
+        outDegree
+      ),
+      radius = ~ ifelse(
+        incursionNode == 1,
+        4e4,
+        # Set constant size for max value
+        scales::rescale(annualEstablished, to = c(4e3, 4e4))
+      )  # Rescale for others
+    ) %>% 
+    
+    setView(lng = 173.40, lat = -41, zoom = 5.5) %>%
+    
+    # Add a legend for annualEstablished
+    addLegend(
+      pal = mypal_annualEstablished,
+      values = nodes_data$annualEstablished,
+      # labFormat = labelFormat(
+      #   transform = function(x) log(x + 1)  # Log transformation for legend values
+      # ),
+      group = "circles",
+      title = "Annual Established",  # Title for the legend
+      position = "bottomleft"
+    ) %>%
+    
+    # Add controls and additional features
+    addControl(html = "<div id='map-title'>MarPEST<\u002fdiv>", position = "topright") %>%
+    addControl(html = "<div id='map-title'>Author: Biosecurity ToolBox<\u002fdiv>", position = "bottomleft") %>%
+    
+    addLayersControl(baseGroups = c("Street view", "Dark"),
+                     options = layersControlOptions(collapsed = FALSE)) %>%
+    
+    addScaleBar() %>%
+    
+    hideGroup("Dark")  # Hide the Dark layer by default
+})
+
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+# Reactive text based on Metric_option
+output$metric_description <- renderText({
+  if (input$Metric_option1 == "NS") {
+    "Node Status: Shows the total number of destinations in which the pest is: a) absent, b) introduced but not yet established, and c) established and growing. Destination status is plotted through time. Species spawning activity shown by vertical grey bars."
+  } else if (input$Metric_option1 == "PPP") {
+    "Propagule Pressure plot: Shows the total level of pest introduction across New Zealand’s seascape, partitioned by maritime sectors: Commercial, Recreational, and Aquaculture."
+  }
+})
+
+# Reactive expression to get the filtered plot data based on Metric_option and selected port
+filtered_plot_data <- reactive({
+  plot_data <- if (input$Metric_option1 == "NS") {
+    node_status_plots
+  } else {
+    industry_plots
+  }
+  
+  # Filter by the selected port
+  filtered_data <- plot_data %>%
+    keep(~ !is.na(.x$port) && as.character(.x$port) == input$port_options1)
+  
+  if (length(filtered_data) == 0) {
+    return(NULL)  # No data available for the selected criteria
+  }
+  
+  return(filtered_data)
+})
+
+# Render the plots for all management options
+output$plot <- renderPlot({
+  plot_data <- filtered_plot_data()
+  
+  if (is.null(plot_data)) {
+    return(NULL)  # No data available
+  }
+  
+  # List of management options to loop through
+  management_options <- c("BAU", "CULL", "HULL")
+  
+  # Extract and combine plots for each management option
+  plot_list <- lapply(management_options, function(mgt_option) {
+    plot_mgt <- plot_data %>%
+      keep(~ as.character(.x$MNT) == mgt_option)
+    
+    if (length(plot_mgt) > 0) {
+      plot_mgt[[1]]$plot +
+        ggtitle(paste("Management Scenario:", mgt_option)) +
+        theme(
+          plot.title = element_text(size = 16),
+          axis.title = element_text(size = 16),
+          axis.text = element_text(size = 16),
+          legend.text = element_text(size = 16),
+          legend.title = element_text(size = 16)
+        )
+    }
+  })
+  
+  # Combine the plots using cowplot, arranging them in a vertical stack
+  combined_plot <- ggarrange(plotlist = plot_list, ncol = 1, common.legend = T, legend = "right")
+  
+  # Render the combined plot
+  print(combined_plot)
+})
+
+
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+# Reactive text based on Metric_option2
+output$metric_description2 <- renderText({
+  if (input$Metric_option2 == "NS") {
+    "Node Status: Shows the total number of destinations in which the pest is: a) absent, b) introduced but not yet established, and c) established and growing. Destination status is plotted through time. Species spawning activity shown by vertical grey bars."
+  } else if (input$Metric_option2 == "PPP") {
+    "Propagule Pressure plot: Shows the total level of pest introduction across New Zealand’s seascape, partitioned by maritime sectors: Commercial, Recreational, and Aquaculture."
+  }
+})
+
+# Reactive expression to get filtered plot data based on Metric_option2, selected ports, and management options
+filtered_plot_data1 <- reactive({
+  req(input$port_options2, input$Metric_option2, input$management_options2)  # Corrected to management_options2
+
+  plot_data <- if (input$Metric_option2 == "NS") {
+    node_status_plots  # Ensure this is defined and contains the data
+  } else {
+    industry_plots  # Ensure this is defined and contains the data
+  }
+
+  # Debugging statement
+  print("Plot data before filtering:")
+  print(head(plot_data))
+
+  # Filter the plot_data for the selected ports and management options
+  filtered_data <- plot_data %>%
+    keep(~ as.character(.x$port) %in% input$port_options2 & 
+           .x$MNT == input$management_options2)
+
+  # Debugging statement
+  print("Filtered data:")
+  print(length(filtered_data))
+
+  # Ensure at least one entry exists after filtering
+  if (length(filtered_data) == 0) {
+    # If there's no data, return a default plot
+    return(list(ggplot() + 
+                 ggtitle("No data available for selected options") +
+                 theme(plot.title = element_text(size = 18)))
+    )
+  }
+
+  return(filtered_data)
+})
+
+# Render the plot based on filtered plot data
+output$plots2 <- renderPlot({
+  plot_data <- filtered_plot_data1()
+
+  # Create plots for each selected port
+  plot_list <- lapply(input$port_options2, function(port) {
+    port_name <- switch(port,
+                        "AUK" = "Auckland",
+                        "BOI" = "Bay of Islands",  
+                        "TAU" = "Tauranga",
+                        "LYT" = "Lyttelton",
+                        "BLF" = "Bluff",
+                        "CDL" = "Coromandel",
+                        "DUN" = "Dunedin",
+                        "GBI" = "Great Barrier Island",
+                        "GIS" = "Gisborne",
+                        "GMI" = "Great Mercury Island",
+                        "HVK" = "Havelock",
+                        "MBS" = "Marlborough Sounds",
+                        "MFD" = "Milford Sound",
+                        "NEL" = "Nelson",
+                        "NPR" = "Napier",
+                        "NPY" = "New Plymouth",
+                        "PCN" = "Picton",
+                        "STW" = "Stewart Island",
+                        "TIM" = "Timaru",
+                        "WEL" = "Wellington",
+                        "WGI" = "Whangarei")
+
+    port_data <- plot_data %>%
+      keep(~ as.character(.x$port) == port)
+
+    if (length(port_data) > 0) {
+      port_data[[1]]$plot + 
+        ggtitle(paste("Port of Incursion:", port_name)) +
+        theme(
+          axis.title = element_text(size = 16),
+          axis.text = element_text(size = 16),
+          legend.text = element_text(size = 16),
+          legend.title = element_text(size = 16),
+          plot.title = element_text(size = 16)
+        )
+    } else {
+      ggplot() + 
+        ggtitle(paste("No data for", port_name)) +
+        theme(plot.title = element_text(size = 18))
+    }
+  })
+
+  # Combine the plots into a single layout using ggarrange
+  combined_plot <- ggarrange(plotlist = plot_list, ncol = 1, common.legend = TRUE, legend = "right")
+
+  # Render the combined plot
+  print(combined_plot)
+})
+
+
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server">
+# Reactive expression to filter data based on inputs
+filtered_data <- reactive({
+  # Filter data based on selected ports and management options
+  industry_data %>%
+    dplyr::filter(port %in% input$port_options2, MNT == input$management_options2)
+})
+
+# Render the reactive data table
+output$filtered_table <- renderTable({
+  filtered_data()  # Use the filtered data directly
+})
+
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="server-extras">
+ojs_define <- function(..., .session = shiny::getDefaultReactiveDomain()) {
+  quos <- rlang::enquos(...)
+  vars <- rlang::list2(...)
+  nm <- names(vars)
+  if (is.null(nm)) {
+    nm <- rep_len("", length(vars))
+  }
+  mapply(function(q, nm, val) {
+    # Infer name, if possible
+    if (nm == "") {
+      tryCatch({
+        nm <- rlang::as_name(q)
+      }, error = function(e) {
+        code <- paste(collapse = "\n", deparse(rlang::f_rhs(q)))
+        stop("ojs_define() could not create a name for the argument: ", code)
+      })
+    }
+    .session$output[[nm]] <- val
+    outputOptions(.session$output, nm, suspendWhenHidden = FALSE)
+    .session$sendCustomMessage("ojs-export", list(name = nm))
+    NULL
+  }, quos, nm, vars, SIMPLIFY = FALSE, USE.NAMES = FALSE)
+  invisible()
+}
+</script>
+</p>
+<!--html_preserve-->
+<script type="application/shiny-prerendered" data-context="dependencies">
+{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["ionrangeslider-javascript"]},{"type":"character","attributes":{},"value":["2.3.1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["www/shared/ionrangeslider"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["js/ion.rangeSlider.min.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["shiny"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["1.9.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["strftime"]},{"type":"character","attributes":{},"value":["0.9.2"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["www/shared/strftime"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["strftime-min.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["shiny"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["1.9.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["ionrangeslider-css"]},{"type":"character","attributes":{},"value":["2.3.1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["www/shared/ionrangeslider"]}]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["css/ion.rangeSlider.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["shiny"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["1.9.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["selectize"]},{"type":"character","attributes":{},"value":["0.15.2"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["www/shared/selectize"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["js/selectize.min.js","accessibility/js/selectize-plugin-a11y.min.js"]},{"type":"character","attributes":{},"value":["css/selectize.bootstrap3.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["shiny"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["1.9.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["selectize"]},{"type":"character","attributes":{},"value":["0.15.2"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["www/shared/selectize"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["js/selectize.min.js","accessibility/js/selectize-plugin-a11y.min.js"]},{"type":"character","attributes":{},"value":["css/selectize.bootstrap3.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["shiny"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["1.9.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["htmltools-fill"]},{"type":"character","attributes":{},"value":["0.5.8.1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["fill"]}]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["fill.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["htmltools"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.5.8.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["htmlwidgets"]},{"type":"character","attributes":{},"value":["1.6.4"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["www"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["htmlwidgets.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["htmlwidgets"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["1.6.4"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["jquery"]},{"type":"character","attributes":{},"value":["3.6.0"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["lib/3.6.0"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["jquery-3.6.0.min.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["jquerylib"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.1.4"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["leaflet"]},{"type":"character","attributes":{},"value":["1.3.1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["htmlwidgets/lib/leaflet"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["leaflet.js"]},{"type":"character","attributes":{},"value":["leaflet.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["leaflet"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["2.2.2"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["leafletfix"]},{"type":"character","attributes":{},"value":["1.0.0"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["htmlwidgets/lib/leafletfix"]}]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["leafletfix.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["leaflet"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["2.2.2"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["proj4"]},{"type":"character","attributes":{},"value":["2.6.2"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["htmlwidgets/plugins/Proj4Leaflet"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["proj4.min.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["leaflet"]},{"type":"logical","attributes":{},"value":[false]},{"type":"character","attributes":{},"value":["2.2.2"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["Proj4Leaflet"]},{"type":"character","attributes":{},"value":["1.0.1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["htmlwidgets/plugins/Proj4Leaflet"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["proj4leaflet.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["leaflet"]},{"type":"logical","attributes":{},"value":[false]},{"type":"character","attributes":{},"value":["2.2.2"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["rstudio_leaflet"]},{"type":"character","attributes":{},"value":["1.3.1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["htmlwidgets/lib/rstudio_leaflet"]}]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["rstudio_leaflet.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["leaflet"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["2.2.2"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["leaflet-binding"]},{"type":"character","attributes":{},"value":["2.2.2"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["htmlwidgets/assets"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["leaflet.js"]},{"type":"NULL"},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["leaflet"]},{"type":"logical","attributes":{},"value":[false]},{"type":"character","attributes":{},"value":["2.2.2"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["selectize"]},{"type":"character","attributes":{},"value":["0.15.2"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["www/shared/selectize"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["js/selectize.min.js","accessibility/js/selectize-plugin-a11y.min.js"]},{"type":"character","attributes":{},"value":["css/selectize.bootstrap3.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["shiny"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["1.9.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["selectize"]},{"type":"character","attributes":{},"value":["0.15.2"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["www/shared/selectize"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["js/selectize.min.js","accessibility/js/selectize-plugin-a11y.min.js"]},{"type":"character","attributes":{},"value":["css/selectize.bootstrap3.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["shiny"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["1.9.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["htmltools-fill"]},{"type":"character","attributes":{},"value":["0.5.8.1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["fill"]}]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["fill.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["htmltools"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.5.8.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["selectize"]},{"type":"character","attributes":{},"value":["0.15.2"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["www/shared/selectize"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["js/selectize.min.js","accessibility/js/selectize-plugin-a11y.min.js"]},{"type":"character","attributes":{},"value":["css/selectize.bootstrap3.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["shiny"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["1.9.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["selectize"]},{"type":"character","attributes":{},"value":["0.15.2"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["www/shared/selectize"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["js/selectize.min.js","accessibility/js/selectize-plugin-a11y.min.js"]},{"type":"character","attributes":{},"value":["css/selectize.bootstrap3.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["shiny"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["1.9.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["selectize"]},{"type":"character","attributes":{},"value":["0.15.2"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["www/shared/selectize"]}]},{"type":"NULL"},{"type":"character","attributes":{},"value":["js/selectize.min.js","accessibility/js/selectize-plugin-a11y.min.js"]},{"type":"character","attributes":{},"value":["css/selectize.bootstrap3.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["shiny"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["1.9.1"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["htmltools-fill"]},{"type":"character","attributes":{},"value":["0.5.8.1"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["fill"]}]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["fill.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["htmltools"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.5.8.1"]}]}]}
+</script>
+<!--/html_preserve-->
+<!--html_preserve-->
+<script type="application/shiny-prerendered" data-context="execution_dependencies">
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83]}},"value":[{"type":"character","attributes":{},"value":["abind","backports","base","bit","bit64","broom","bslib","cachem","car","carData","class","classInt","cli","colorspace","compiler","crayon","crosstalk","datasets","DBI","digest","dplyr","e1071","evaluate","fansi","fastmap","generics","ggplot2","ggpubr","ggsignif","glue","graphics","grDevices","grid","gtable","hms","htmltools","htmlwidgets","httpuv","jquerylib","jsonlite","KernSmooth","knitr","later","leaflet","lifecycle","magrittr","memoise","methods","mime","munsell","parallel","pillar","pkgconfig","promises","proxy","purrr","R6","RColorBrewer","Rcpp","readr","rlang","rmarkdown","rstatix","rstudioapi","sass","scales","sf","shiny","stats","tibble","tidyr","tidyselect","tools","tzdb","units","utf8","utils","vctrs","vroom","withr","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.4-8","1.4.1","4.3.2","4.5.0","4.5.2","1.0.7","0.8.0","1.1.0","3.1-2","3.0-5","7.3-22","0.4-10","3.6.1","2.1-0","4.3.2","1.5.3","1.2.0","4.3.2","1.2.3","0.6.37","1.1.4","1.7-13","1.0.0","1.0.4","1.2.0","0.1.3","3.5.1","0.6.0","0.6.4","1.6.2","4.3.2","4.3.2","4.3.2","0.3.5","1.1.3","0.5.8.1","1.6.4","1.6.15","0.1.4","1.8.7","2.23-22","1.48","1.3.2","2.2.2","1.0.4","2.0.3","2.0.1","4.3.2","0.12","0.5.1","4.3.2","1.9.0","2.0.3","1.3.0","0.4-27","1.0.2","2.5.1","1.1-3","1.0.11","2.1.4","1.1.4.9000","2.28","0.7.2","0.16.0","0.4.9","1.3.0","1.0-13","1.9.1","4.3.2","3.2.1","1.3.1","1.2.1","4.3.2","0.4.0","0.8-4","1.2.3","4.3.2","0.6.5","1.6.5","3.0.1","0.47","1.8-4","2.3.7"]}]}]}
+</script>
+<!--/html_preserve-->
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /container fluid -->
+
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (_event) {
+  if (window.bslib.Card) {
+    window.bslib.Card.initializeAllCards();
+  }
+}); 
+</script>
+  
+
+
+
+</body></html>

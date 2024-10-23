@@ -2,9 +2,10 @@
 library(fs)
 library(sf)
 library(tidyverse)
+rm(list = ls())
 
 # Define the folder path
-folder_path <- "S:/guiInputsv2 (eSolutions Admin)"
+folder_path <- "S:/guiInputsv4 (eSolutions Admin)"
 
 # Define a function to read an .rds file and add factor columns
 read_rds_file <- function(file_path) {
@@ -12,7 +13,7 @@ read_rds_file <- function(file_path) {
   file_name <- basename(file_path)
   
   # Extract port, MNT, and type (nodes or edges) from the file name
-  port <- str_extract(file_name, "AUK|LYT|TAU")
+  port <- str_extract(file_name, "(?<=-)[A-Z]{3}(?=_)")
   MNT <- str_extract(file_name, "BAU|OUTHULL|CULL")
   type <- str_extract(file_name, "nodes|edges")
   
@@ -25,7 +26,7 @@ read_rds_file <- function(file_path) {
   # Add new columns to the data
   data %>%
     mutate(source_file = file_name,
-           port = factor(port, levels = c("AUK", "LYT", "TAU")),
+           port = factor(port),
            MNT = factor(MNT, levels = c("BAU", "HULL", "CULL")),
            type = factor(type, levels = c("nodes", "edges")))
 }
@@ -44,7 +45,8 @@ nodes_data <-
 write_rds(nodes_data, "combined_nodes_data.rds", compress = 'xz')
 
 # Process and combine edges files
-edges_data <- edges_files %>%
+edges_data <- 
+  edges_files %>%
   map(read_rds_file) %>%
   bind_rows()
 
